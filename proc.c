@@ -532,3 +532,8 @@ procdump(void)
     cprintf("\n");
   }
 }
+int
+hello(void){
+  cprintf("hello\n");
+  return 0;
+}
