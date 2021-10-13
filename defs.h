@@ -122,6 +122,7 @@ void            wakeup(void*);
 void            yield(void);
 int             hello(void);
 int             getProcCount(void);
+int             getReadCount(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

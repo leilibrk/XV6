@@ -550,3 +550,9 @@ getProcCount(void){
   cprintf("The number of current processes is: %d \n", count);  
   return 0;
 }
+
+int
+getReadCount(int readCount){
+  cprintf("The number of calling the sys_read systemcall is: %d\n", readCount);
+  return 0;
+}
