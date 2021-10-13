@@ -182,6 +182,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_testHello\
+	_getProcCountTest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -255,6 +256,7 @@ EXTRA=\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	_testHello.c\
+	_getProcCountTest.c\
 
 dist:
 	rm -rf dist

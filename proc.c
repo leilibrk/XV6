@@ -547,5 +547,6 @@ getProcCount(void){
       count++;
     }  
   }
-  return count;
+  cprintf("The number of current processes is: %d \n", count);  
+  return 0;
 }
