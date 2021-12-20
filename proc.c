@@ -556,3 +556,39 @@ getReadCount(int readCount){
   cprintf("The number of calling the sys_read systemcall is: %d\n", readCount);
   return 0;
 }
+
+int
+thread_create(void *stack, int status)
+{
+  return 0;
+}
+
+int
+thread_wait(void)
+{
+  return 0;
+}
+
+int
+unit0_operation(void)
+{
+  return 0;
+}
+
+int
+unit1_operation(void)
+{
+  return 0;
+}
+
+int
+unit2_operation(void)
+{
+  return 0;
+}
+
+int
+unit3_operation(void)
+{
+  return 0;
+}

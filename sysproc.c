@@ -6,7 +6,7 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
-extern int readCount;
+
 
 int
 sys_fork(void)
@@ -103,8 +103,46 @@ sys_getProcCount(void)
   return getProcCount();
 }
 
+extern int readCount;
+
 int
 sys_getReadCount(void)
 {
   return getReadCount(readCount);
+}
+
+int
+sys_thread_create(void)
+{
+  return thread_create();
+}
+
+int
+sys_thread_wait(void)
+{
+  return thread_wait();
+}
+
+int
+sys_unit0_operation(void)
+{
+  return unit0_operation();
+}
+
+int
+sys_unit1_operation(void)
+{
+  return unit1_operation();
+}
+
+int
+sys_unit2_operation(void)
+{
+  return unit2_operation();
+}
+
+int
+sys_unit3_operation(void)
+{
+  return unit3_operation();
 }

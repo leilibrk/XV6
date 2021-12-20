@@ -106,6 +106,12 @@ extern int sys_uptime(void);
 extern int sys_hello(void);
 extern int sys_getProcCount(void);
 extern int sys_getReadCount(void);
+extern int sys_thread_create(void);
+extern int sys_thread_wait(void);
+extern int sys_unit0_operation(void);
+extern int sys_unit1_operation(void);
+extern int sys_unit2_operation(void);
+extern int sys_unit3_operation(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -132,6 +138,12 @@ static int (*syscalls[])(void) = {
 [SYS_hello]   sys_hello,
 [SYS_getProcCount]  sys_getProcCount,
 [SYS_getReadCount]  sys_getReadCount,
+[SYS_thread_create] sys_thread_create,
+[SYS_thread_wait] sys_thread_wait,
+[SYS_unit0_operation] sys_unit0_operation,
+[SYS_unit1_operation] sys_unit1_operation,
+[SYS_unit2_operation] sys_unit2_operation,
+[SYS_unit3_operation] sys_unit3_operation,
 };
 
 void

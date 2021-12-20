@@ -26,6 +26,12 @@ int uptime(void);
 int hello(void);
 int getProcCount(void);
 int getReadCount(int);
+int thread_create(void *stack, int status);
+int thread_wait(void);
+int unit0_operation(void);
+int unit1_operation(void);
+int unit2_operation(void);
+int unit3_operation(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

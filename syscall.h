@@ -23,3 +23,9 @@
 #define SYS_hello  90
 #define SYS_getProcCount 91
 #define SYS_getReadCount 92
+#define SYS_thread_create 93
+#define SYS_thread_wait 94
+#define SYS_unit0_operation 95
+#define SYS_unit1_operation 96
+#define SYS_unit2_operation 97
+#define SYS_unit3_operation 98
