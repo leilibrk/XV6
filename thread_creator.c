@@ -4,20 +4,20 @@
 
 #define PAGESIZE 4096
 
-int thread_create(void (*fn) (void *), void *arg, int status){
+int thread_creator(void (*fn) (void *), void *arg, int status){
     void *fptr = malloc(2 * PAGESIZE);
     void *stack;
     if(fptr == 0)
         return -1;
 
-    int mod = (unit) fptr % PAGESIZE;
+    int mod = (uint) fptr % PAGESIZE;
 
     if(mod == 0)
         stack = fptr;
     else
         stack = fptr + (PAGESIZE - mod);
     
-    int thread_id = thread_create((void*)stack);
+    int thread_id = thread_create((void *)stack, status);
 
     if(thread_id < 0)
         printf(1, "clone failed\n");

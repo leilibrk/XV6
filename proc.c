@@ -187,7 +187,7 @@ growproc(int n)
   if(curproc->threads == -1){ //child thread
     //we have to update parent and sibilings
     curproc->parent->sz = curproc->sz; //update parent sz
-    numberOfChildren = curproc->parent->threads - 2; //number or its brothers and sisters
+    numberOfChildren = curproc->parent->threads - 2; //number or its sibilings
     if(numberOfChildren <= 0){
       //doesn't have sibilings
       release(&ptable.lock);

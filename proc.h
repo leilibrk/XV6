@@ -36,8 +36,9 @@ enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
 struct proc {
-  int threads;
+  int threads;                // -1 for child thread, 1 for child process, and others for parent thread
   int stackTop;
+  int status;                  // 0 for unit threads and 1 for task threads
   uint sz;                     // Size of process memory (bytes)
   pde_t* pgdir;                // Page table
   char *kstack;                // Bottom of kernel stack for this process
