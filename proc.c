@@ -20,10 +20,13 @@ extern void trapret(void);
 
 static void wakeup1(void *chan);
 
+struct spinlock threadLock; //lock for growing address space
+
 void
 pinit(void)
 {
   initlock(&ptable.lock, "ptable");
+  initlock(&threadLock, "threadLock"); //read the details!
 }
 
 // Must be called with interrupts disabled
@@ -163,15 +166,68 @@ growproc(int n)
   uint sz;
   struct proc *curproc = myproc();
 
+  acquire(&threadLock); //lock the threadLock
   sz = curproc->sz;
   if(n > 0){
-    if((sz = allocuvm(curproc->pgdir, sz, sz + n)) == 0)
+    if((sz = allocuvm(curproc->pgdir, sz, sz + n)) == 0){
+      release(&threadLock);
       return -1;
+    }
   } else if(n < 0){
-    if((sz = deallocuvm(curproc->pgdir, sz, sz + n)) == 0)
+    if((sz = deallocuvm(curproc->pgdir, sz, sz + n)) == 0){
+      release(&threadLock);
       return -1;
+    }
   }
-  curproc->sz = sz;
+  curproc->sz = sz; //update the size of current process
+  acquire(&ptable.lock);
+  //we want to update sz in all threads
+  struct proc *p;
+  int numberOfChildren;
+  if(curproc->threads == -1){ //child thread
+    //we have to update parent and sibilings
+    curproc->parent->sz = curproc->sz; //update parent sz
+    numberOfChildren = curproc->parent->threads - 2; //number or its brothers and sisters
+    if(numberOfChildren <= 0){
+      //doesn't have sibilings
+      release(&ptable.lock);
+      release(&threadLock);
+      switchuvm(curproc);
+      return 0;
+    }
+    else{
+      //have sibilings
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p != curproc && p->parent == curproc->parent && p->threads == -1){
+          p->sz = curproc->sz;
+          numberOfChildren--;
+        }
+      }
+    }
+  }
+  else{
+    //parent
+    numberOfChildren = curproc->threads - 1;
+    if(numberOfChildren <= 0){
+      //have no children
+      release(&ptable.lock);
+      release(&threadLock);
+      switchuvm(curproc);
+      return 0;
+    }
+    else{
+      //have chilren which we should update there size
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->parent == curproc && p->threads == -1){
+          p->sz = curproc->sz;
+          numberOfChildren--;
+        }
+      }
+    }
+
+  }
+  release(&ptable.lock);
+  release(&threadLock);
   switchuvm(curproc);
   return 0;
 }
@@ -267,6 +323,16 @@ exit(void)
   curproc->state = ZOMBIE;
   sched();
   panic("zombie exit");
+}
+
+int
+check_pgdir_share(struct proc *process){
+  struct proc *p;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p != process && p->pgdir == process->pgdir)
+      return 0; //there is still a thread with the same pgdir
+  }
+  return 1; //it's okay to free pgdir
 }
 
 // Wait for a child process to exit and return its pid.
@@ -617,16 +683,6 @@ thread_create(void *stack, int status)
 
   return pid;
 }
-int
-check_pgdir_share(struct proc *process){
-  struct proc *p;
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if(p != process && p->pgdir == process->pgdir)
-      return 0; //there is still a thread with the same pgdir
-  }
-  return 1; //it's okay to free pgdir
-}
-
 int
 thread_wait(void)
 {
