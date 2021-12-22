@@ -114,7 +114,9 @@ sys_getReadCount(void)
 int
 sys_thread_create(void)
 {
-  return thread_create();
+  void * stack = 0;
+  int status = 0;
+  return thread_create(stack, status);
 }
 
 int
