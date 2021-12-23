@@ -256,7 +256,7 @@ fork(void)
   }
   np->sz = curproc->sz;
   np->parent = curproc;
-  np->threads = 1;
+  np->threads = 1; //have a child now
   *np->tf = *curproc->tf;
 
   // Clear %eax so that fork returns 0 in the child.
@@ -639,15 +639,16 @@ int
 thread_create(void *stack, int status)
 {
   int i, pid;
-  struct proc *np;
+  struct proc *np; //new process
   struct proc *curproc = myproc();
 
   // Allocate process.
   if((np = allocproc()) == 0){
     return -1;
   }
-  //incerase thread numbers for parent (default is -1)
+  //incerase thread numbers for parent (default for child is -1)
   curproc->threads++;
+  //grow downwards
   np->stackTop = (int)((char*)stack + PGSIZE);
   acquire(&ptable.lock);
   np->pgdir = curproc->pgdir;
@@ -667,6 +668,7 @@ thread_create(void *stack, int status)
   // ebp is the base pointer
   np->tf->ebp = np->stackTop - (curproc->stackTop - curproc->tf->ebp);
 
+  int i;
   for(i = 0; i < NOFILE; i++)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);

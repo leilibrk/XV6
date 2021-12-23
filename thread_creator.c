@@ -20,7 +20,7 @@ int thread_creator(void (*fn) (void *), void *arg, int status){
     int thread_id = thread_create((void *)stack, status);
 
     if(thread_id < 0)
-        printf(1, "clone failed\n");
+        printf(1, "thread create failed\n");
     else if (thread_id == 0){
         //child
         (fn)(arg); //call the function passed to thread_create
