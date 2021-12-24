@@ -668,7 +668,6 @@ thread_create(void *stack, int status)
   // ebp is the base pointer
   np->tf->ebp = np->stackTop - (curproc->stackTop - curproc->tf->ebp);
 
-  int i;
   for(i = 0; i < NOFILE; i++)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
