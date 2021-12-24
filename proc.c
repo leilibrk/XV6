@@ -256,7 +256,7 @@ fork(void)
   }
   np->sz = curproc->sz;
   np->parent = curproc;
-  np->threads = 1; //have a child now
+  np->threads = 1; //the new process is a child process.
   *np->tf = *curproc->tf;
 
   // Clear %eax so that fork returns 0 in the child.
